@@ -110,7 +110,7 @@ the `Reason` in a human readable format:
 application, so refer to its documentation for detailed information on how to write
 YAML validators.
 
-The library also depends on [fast_yaml](https://github.com/processone/fast_yaml)
+The library also depends on [yamerl](https://github.com/yakaz/yamerl)
 parser.
 
 ## conf behaviour

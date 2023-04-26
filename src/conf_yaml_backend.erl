@@ -24,7 +24,7 @@
 -export([format_error/1]).
 -export_type([error_reason/0]).
 
--type yaml() :: term(). %% TODO: must be fast_yaml:yaml(), but it's not exported
+-type yaml() :: term().
 -type yaml_error_reason() :: {bad_yaml, term()}.
 -type error_reason() :: {unsupported_application, atom()} |
                         {invalid_yaml_config, yval:error_reason(), yval:ctx()} |
@@ -40,7 +40,7 @@
 %%%===================================================================
 -spec decode(iodata()) -> {ok, yaml()} | {error, error_reason()}.
 decode(Data) ->
-    case fast_yaml:decode(Data) of
+    case yaml_decode(Data) of
         {ok, [Y]} ->
             {ok, Y};
         {ok, []} ->
@@ -111,7 +111,7 @@ format_error({bad_ref, Ref, Reason}) ->
 format_error({circular_ref, Ref}) ->
     format("Circularly defined reference: ~ts", [Ref]);
 format_error({bad_yaml, Reason}) ->
-    "Malformed YAML: " ++ fast_yaml:format_error(Reason);
+    format("Malformed YAML: ~p", [Reason]);
 format_error({bad_env, Reason}) ->
     conf_env:format_error(Reason);
 format_error({bad_mod, Reason}) ->
@@ -275,3 +275,36 @@ to_string(B) when is_binary(B) ->
     binary_to_list(B);
 to_string(S) ->
     S.
+
+-spec yaml_decode(iodata()) -> {ok, yaml()} | {error, error_reason()}.
+yaml_decode(Data) ->
+    try
+        RawDocs =  yamerl_constr:string(Data),
+        {ok, [yaml_decode(RawDoc, []) || RawDoc <- RawDocs]}
+    catch
+        _Error:Reason ->
+            {error, Reason}
+    end.
+
+yaml_decode([], Acc) ->
+    lists:reverse(Acc);
+yaml_decode([{RawKey, RawValue} | Rest], Acc) ->
+    Key = unicode:characters_to_binary(RawKey),
+    Value = yaml_decode_val(RawValue),
+    yaml_decode(Rest, [{Key, Value} | Acc]).
+
+yaml_decode_val([]) ->
+    [];
+yaml_decode_val([{_RawKey, _RawValue} | _Rest] = Proplist) ->
+    yaml_decode(Proplist, []);
+yaml_decode_val(List) when is_list(List) ->
+    case io_lib:printable_unicode_list(List) of
+        true ->
+            unicode:characters_to_binary(List);
+        false ->
+            [yaml_decode_val(Element) || Element <- List]
+    end;
+yaml_decode_val(Boolean) when is_boolean(Boolean) ->
+    erlang:atom_to_binary(Boolean);
+yaml_decode_val(Value) ->
+    Value.
