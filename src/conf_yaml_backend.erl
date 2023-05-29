@@ -17,6 +17,9 @@
 -module(conf_yaml_backend).
 -behaviour(conf_backend).
 
+%% Include files
+-include_lib("kernel/include/logger.hrl").
+
 %% API
 -export([decode/1]).
 -export([validate/1]).
@@ -129,8 +132,11 @@ create_validators(AppOpts) ->
                   {ok, Mod} ->
                       Validator = Mod:validator(),
                       {ok, Acc#{App => Validator}};
-                  {error, _} = Err ->
-                      Err
+                  {error, _} ->
+                      % TODO: revisit this
+                      ?LOG_WARNING("[conf] Found a YAML configuration for an unsupported application: '~s'",
+                                   [App]),
+                      {ok, Acc}
               end;
          (_, {error, _} = Err) ->
               Err

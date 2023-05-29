@@ -3,6 +3,6 @@
        {ref,"bf9d8b743bfc9775f2ddad9fb8d18ba5dc29d3e1"}},
   0},
  {<<"yval">>,
-  {git,"https://github.com/zinid/yval.git",
-       {ref,"20db3ec327701f1ab06f2e926db3aada2517e5c9"}},
+  {git,"https://github.com/nomasystems/yval.git",
+       {ref,"e461d8dabebf8ec328be3d85afabc25416c35d7b"}},
   0}].
