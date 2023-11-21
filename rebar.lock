@@ -4,5 +4,5 @@
   0},
  {<<"yval">>,
   {git,"https://github.com/nomasystems/yval.git",
-       {ref,"e461d8dabebf8ec328be3d85afabc25416c35d7b"}},
+       {ref,"8cddc44992a81dce187754ec017b481cd52d5ce2"}},
   0}].
