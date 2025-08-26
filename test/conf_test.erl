@@ -46,6 +46,7 @@ apps() ->
 expect() ->
     [{crypto,[{fips_mode,false},{rand_cache_size,1024}]},
      {kernel,[{boot_server_slaves,[{127,0,0,1}]},
+              {connect_all,true},
               {dist_auto_connect,never},
               {global_groups,[{group1,normal,[a@localhost,b@localhost]}]},
               {inet_dist_listen_max,65535},
