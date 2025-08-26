@@ -1,8 +1,8 @@
 [{<<"yamerl">>,
   {git,"https://github.com/yakaz/yamerl.git",
-       {ref,"bf9d8b743bfc9775f2ddad9fb8d18ba5dc29d3e1"}},
+       {ref,"bdb3b032f972a397c527667254393cd3c8942df3"}},
   0},
  {<<"yval">>,
   {git,"https://github.com/nomasystems/yval.git",
-       {ref,"8cddc44992a81dce187754ec017b481cd52d5ce2"}},
+       {ref,"374900ef1b39bc76420075a0dfd7ceeb9512be5b"}},
   0}].
